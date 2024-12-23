@@ -9,7 +9,7 @@ except FileNotFoundError:
 
 setup(
     name="map-content-tool",
-    version="1.1.0",
+    version="1.1.1",
     py_modules=["mapContentTool"],
     install_requires=[],
     entry_points={
