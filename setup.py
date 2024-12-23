@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="map-content-tool",
-    version="1.0.0",
+    version="1.1.0",
     py_modules=["mapContentTool"],
     install_requires=[], 
     entry_points={
