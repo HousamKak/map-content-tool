@@ -57,17 +57,29 @@ def get_folder_structure(path, exclude_dirs=None):
 
 # Write the selected file contents directly to the structure
 def embed_selected_contents(folder_structure, selected_files):
-    if folder_structure["type"] == "file" and folder_structure in selected_files:
-        try:
-            logging.info(f"Reading content for file: {folder_structure['path']}")
-            with open(folder_structure["path"], "r", encoding="utf-8") as f:
-                folder_structure["contents"] = f.read()
-        except Exception as e:
-            logging.error(f"Error reading file {folder_structure['name']}: {e}")
-            folder_structure["contents"] = f"Error reading file: {e}"
+    """
+    Embed the contents of selected files into the folder structure.
+    Recursively process selected folders to include their files.
+    """
+    if folder_structure["type"] == "file":
+        if folder_structure in selected_files:
+            try:
+                logging.info(f"Reading content for file: {folder_structure['path']}")
+                with open(folder_structure["path"], "r", encoding="utf-8") as f:
+                    folder_structure["contents"] = f.read()
+            except Exception as e:
+                logging.error(f"Error reading file {folder_structure['name']}: {e}")
+                folder_structure["contents"] = f"Error reading file: {e}"
     elif folder_structure["type"] == "directory":
-        for item in folder_structure.get("items", []):
-            embed_selected_contents(item, selected_files)
+        # Check if the folder itself is selected
+        if folder_structure in selected_files:
+            # Recursively mark all contents within the folder as selected
+            for item in folder_structure.get("items", []):
+                embed_selected_contents(item, selected_files)
+        else:
+            # Process only selected items within the folder
+            for item in folder_structure.get("items", []):
+                embed_selected_contents(item, selected_files)
 
 # Save output to .json or .txt (both using JSON structure)
 def save_output(folder_structure, output_file):
@@ -139,14 +151,53 @@ class FileSelector:
         )
 
     def toggle_selection(self, index):
+        """
+        Toggle selection for the given row index.
+        If it's a folder, select/deselect all items within it.
+        """
         logging.info(f"Toggling selection for index: {index}")
         file = self.rows[index].file
-        if file in self.selected_files:
-            self.selected_files.remove(file)
+
+        if file["type"] == "directory":
+            # Select/deselect all items recursively in the directory
+            if file in self.selected_files:
+                self.deselect_all_in_folder(file)
+            else:
+                self.select_all_in_folder(file)
         else:
-            self.selected_files.append(file)
+            # Toggle individual file selection
+            if file in self.selected_files:
+                self.selected_files.remove(file)
+            else:
+                self.selected_files.append(file)
 
         self.rows[index].update_state(file in self.selected_files)
+
+    def select_all_in_folder(self, folder):
+        """
+        Select all files and subfolders within a folder recursively.
+        """
+        if folder not in self.selected_files:
+            self.selected_files.append(folder)
+
+        for item in folder.get("items", []):
+            if item["type"] == "directory":
+                self.select_all_in_folder(item)
+            elif item not in self.selected_files:
+                self.selected_files.append(item)
+
+    def deselect_all_in_folder(self, folder):
+        """
+        Deselect all files and subfolders within a folder recursively.
+        """
+        if folder in self.selected_files:
+            self.selected_files.remove(folder)
+
+        for item in folder.get("items", []):
+            if item["type"] == "directory":
+                self.deselect_all_in_folder(item)
+            elif item in self.selected_files:
+                self.selected_files.remove(item)
 
     def main(self):
         logging.info("Starting the FileSelector UI main loop")
@@ -171,6 +222,7 @@ class FileSelector:
         selected_names = ", ".join([file["name"] for file in self.selected_files])
         logging.info(f"Updating footer with selected files: {selected_names}")
         self.view.footer = urwid.Text(f"Selected: {selected_names}")
+
 
 # Main function
 def main():
