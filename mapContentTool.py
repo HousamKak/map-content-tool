@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Map Content Tool
+"""
+
 import os
 import json
 import urwid
