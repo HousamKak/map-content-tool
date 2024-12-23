@@ -9,9 +9,11 @@ except FileNotFoundError:
 
 setup(
     name="map-content-tool",
-    version="1.1.1",
+    version="1.1.2",
     py_modules=["mapContentTool"],
-    install_requires=[],
+    install_requires=[
+        "urwid>=2.1.2",  # Third-party dependency
+    ],
     entry_points={
         "console_scripts": [
             "map-content=mapContentTool:main",
@@ -20,7 +22,7 @@ setup(
     author="Housam Kak",
     author_email="housam.kak20@gmail.com",
     description="A tool to map directory contents and save output as TXT or JSON.",
-    long_description=long_description,
+    long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/HousamKak/map-content-tool",
     classifiers=[
