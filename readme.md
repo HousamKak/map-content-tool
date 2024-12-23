@@ -1,29 +1,48 @@
 # **Documentation for mapContentTool.py**
 
 ## **Overview**
-`mapContentTool.py` is a command-line tool for mapping the structure of a directory, selecting files and folders interactively, and exporting the directory structure with selected file contents. The output can be saved as a `.txt` (default) or `.json` file.
+`mapContentTool.py` is a command-line tool for mapping the structure of a directory, selecting files and folders interactively, and exporting the directory structure with selected file contents. The output can be saved as a `.txt` (default) or `.json` file. Additionally, the tool can be installed as a Python library to provide the `map-content` command for direct usage.
 
 ---
 
 ## **Features**
-- Interactive selection of files and folders.
-- Recursive handling of folder contents:
+- **Interactive Selection**:
+  - Navigate directory structures.
+  - Select or deselect files and folders interactively.
+- **Recursive Handling**:
   - Selecting a folder includes all its files and subfolders.
   - Deselecting a folder removes all its files and subfolders from the selection.
-- Embeds the content of selected files directly into the output structure.
-- Outputs the directory structure in:
+- **File Content Embedding**:
+  - Embeds the content of selected files directly into the output structure.
+- **Output Options**:
   - **Default**: `.txt` format.
   - **Optional**: `.json` format with a detailed structure.
-- Exclude specific directories from scanning (e.g., `node_modules`, `.git`).
-- Simple and intuitive user interface for navigation and selection.
-- Comprehensive logging for debugging and tracking.
+- **Exclusion Capabilities**:
+  - Exclude specific directories (e.g., `node_modules`, `.git`).
+- **Convenient Command**:
+  - Install as a Python library to use the `map-content` command directly.
+- **Comprehensive Logging**:
+  - Logs all actions and errors for debugging and tracking.
+
+---
+
+## **Installation**
+You can install `mapContentTool.py` as a Python package via pip:
+```bash
+pip install map-content-tool
+```
 
 ---
 
 ## **Usage**
-### **Command-Line Arguments**
+
+### **Command-Line Options**
 ```bash
-python mapContentTool.py [options]
+python mapContentTool.py [directory] [options]
+```
+Or, after installation, use the standalone command:
+```bash
+map-content [directory] [options]
 ```
 
 ### **Options**
@@ -37,34 +56,61 @@ python mapContentTool.py [options]
 
 ### **Examples**
 
-#### **Basic Usage**
-```bash
-python mapContentTool.py
-```
-- Scans the current directory.
-- Outputs the structure to `output.txt`.
+#### **Using Python Script**
+1. **Basic Usage**:
+   ```bash
+   python mapContentTool.py
+   ```
+   - Scans the current directory.
+   - Outputs the structure to `output.txt`.
 
-#### **Specify an Output File**
-```bash
-python mapContentTool.py -o my_directory.json
-```
-- Outputs the directory structure to `my_directory.json`.
+2. **Specify an Output File**:
+   ```bash
+   python mapContentTool.py -o my_directory.json
+   ```
+   - Outputs the directory structure to `my_directory.json`.
 
-#### **Exclude Specific Directories**
-```bash
-python mapContentTool.py -e dist build
-```
-- Excludes the `dist` and `build` directories from the scan.
+3. **Exclude Specific Directories**:
+   ```bash
+   python mapContentTool.py -e dist build
+   ```
+   - Excludes the `dist` and `build` directories from the scan.
 
-#### **Custom Directory**
-```bash
-python mapContentTool.py /path/to/directory
-```
-- Scans the `/path/to/directory` and outputs the structure to `output.txt`.
+4. **Scan a Custom Directory**:
+   ```bash
+   python mapContentTool.py /path/to/directory
+   ```
+   - Scans the `/path/to/directory` and outputs the structure to `output.txt`.
+
+---
+
+#### **Using the `map-content` Command**
+1. **Basic Usage**:
+   ```bash
+   map-content
+   ```
+   - Scans the current directory.
+   - Outputs the structure to `output.txt`.
+
+2. **Custom Directory**:
+   ```bash
+   map-content /path/to/directory
+   ```
+
+3. **Exclude Specific Directories**:
+   ```bash
+   map-content -e dist build
+   ```
+
+4. **Output as JSON**:
+   ```bash
+   map-content -o output.json
+   ```
 
 ---
 
 ## **Output Format**
+
 ### **Default `.txt` Format**
 - The `.txt` format retains the JSON-like structure for readability.
 
@@ -96,7 +142,6 @@ python mapContentTool.py /path/to/directory
 ---
 
 ## **Interactive UI**
-When run without the `-o` flag, the tool opens an interactive UI.
 
 ### **Navigation**
 - **Arrow keys**: Move through the directory tree.
@@ -131,6 +176,7 @@ When run without the `-o` flag, the tool opens an interactive UI.
   - `logging`
   - `sys`
   - `argparse`
+  - `setuptools`
 
 ---
 
@@ -140,11 +186,12 @@ When run without the `-o` flag, the tool opens an interactive UI.
 - Added `.json` as an optional output format.
 - Restored the functionality of showing selected files inside a folder.
 - Improved folder selection and deselection logic to include all nested items.
-- Updated documentation to reflect the latest features and improvements.
+- Updated logging and documentation.
+- Enabled the use of the `map-content` standalone command via setuptools.
 
 ---
 
 ## **Known Issues**
 - None at the moment.
 
-For feature requests or bug reports, please contact the developer or create an issue in the repository (if applicable).
+For feature requests or bug reports, please contact the developer or create an issue in the repository.
