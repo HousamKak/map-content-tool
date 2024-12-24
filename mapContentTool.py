@@ -91,6 +91,7 @@ def embed_selected_contents(folder_structure, selected_files):
 def save_output(folder_structure, output_file):
     try:
         content = json.dumps(folder_structure, indent=4)
+        absolute_path = os.path.abspath(output_file)  # Get the absolute path
         if output_file.endswith(".json"):
             with open(output_file, "w", encoding="utf-8") as f:
                 f.write(content)
@@ -99,12 +100,14 @@ def save_output(folder_structure, output_file):
                 f.write(content)
         else:
             # Default to TXT if no extension is given
+            absolute_path += ".txt"
             with open(f"{output_file}.txt", "w", encoding="utf-8") as f:
                 f.write(content)
-        logging.info(f"Output successfully written to '{output_file}'")
-        print(f"Output written to '{output_file}'.")
+        logging.info(f"Output successfully written to '{absolute_path}'")
+        print(f"Output written to '{absolute_path}'.")
     except Exception as e:
         logging.error(f"Error writing to output file '{output_file}': {e}")
+
 
 # Class representing a tree node (directory or file)
 class TreeNode(urwid.WidgetWrap):
@@ -264,12 +267,16 @@ def main():
         selector = FileSelector(folder_structure)
         selector.main()
 
+        # Embed file contents if files were selected
         if selector.selected_files:
             embed_selected_contents(folder_structure, selector.selected_files)
-            save_output(folder_structure, args.output)
+            logging.info("Selected files embedded into folder structure.")
         else:
-            logging.info("No files selected.")
-            print("No files selected.")
+            logging.info("No files selected. Saving directory structure without file contents.")
+
+        # Save the output regardless of file selection
+        save_output(folder_structure, args.output)
+        
     except Exception as e:
         logging.error(f"Unhandled exception: {e}", exc_info=True)
         print("An error occurred. Check 'file_selector.log' for details.")
