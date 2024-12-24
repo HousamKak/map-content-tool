@@ -9,7 +9,7 @@ except FileNotFoundError:
 
 setup(
     name="map-content-tool",
-    version="1.1.2",
+    version="1.2.1",
     py_modules=["mapContentTool"],
     install_requires=[
         "urwid>=2.1.2",  # Third-party dependency
