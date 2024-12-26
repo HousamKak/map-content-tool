@@ -19,6 +19,7 @@
 - **Output Options**:
   - **Default**: `.txt` format.
   - **Optional**: `.json` format with a detailed structure.
+  - **Clipboard**: Automatically copies output to clipboard when submitting.
 - **Exclusion Capabilities**:
   - Exclude specific directories (e.g., `node_modules`, `.git`).
 - **Convenient Command**:
@@ -211,12 +212,18 @@ map-content [directory] [options]
   - `sys`
   - `argparse`
   - `setuptools`
+  - `pyperclip`
 
 ---
 
 ## **Changelog**
 
 ### **Latest Updates**
+
+#### 1.3.1
+
+- Added: Automatic clipboard copying of the output when pressing Enter
+- The tool now copies the complete structure (including file contents) to clipboard in addition to saving to file
 
 #### 1.2.1
 
