@@ -9,10 +9,11 @@ except FileNotFoundError:
 
 setup(
     name="map-content-tool",
-    version="1.2.1",
+    version="1.3.1",
     py_modules=["mapContentTool"],
     install_requires=[
         "urwid>=2.1.2",  # Third-party dependency
+        "pyperclip>=1.8.2",  # For clipboard functionality
     ],
     entry_points={
         "console_scripts": [
