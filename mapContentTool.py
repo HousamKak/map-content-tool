@@ -10,6 +10,7 @@ import urwid
 import logging
 import sys
 import argparse
+import pyperclip
 
 # Set up logging
 logging.basicConfig(
@@ -222,7 +223,19 @@ class FileSelector:
                     self.toggle_selection(focus_index)
                 self.update_footer()
             elif key == "enter":
-                logging.info("Submitting selected files")
+                logging.info("Submitting selected files and copying to clipboard")
+                # Embed contents before creating JSON
+                if self.selected_files:
+                    embed_selected_contents(self.folder_structure, self.selected_files)
+                # Create the JSON content
+                content = json.dumps(self.folder_structure, indent=4)
+                # Copy to clipboard
+                try:
+                    pyperclip.copy(content)
+                    self.view.footer = urwid.Text("Content copied to clipboard!")
+                except Exception as e:
+                    logging.error(f"Failed to copy to clipboard: {e}")
+                    self.view.footer = urwid.Text("Failed to copy to clipboard!")
                 raise urwid.ExitMainLoop()
 
         urwid.MainLoop(self.view, self.palette, unhandled_input=unhandled_input).run()
